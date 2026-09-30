@@ -5,14 +5,13 @@ import Button from "./ui/Button";
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
 
-function MainNavigation() {
+function Navbar() {
   const { isDark, toggleTheme } = useTheme();
   const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <header
@@ -24,8 +23,9 @@ function MainNavigation() {
     >
       <nav
         aria-label="Main Navigation"
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-4 md:px-6 lg:px-8"
+        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
       >
+        {/* Brand */}
         <div className="flex flex-col min-w-0">
           <Link
             to="/"
@@ -39,18 +39,20 @@ function MainNavigation() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Desktop Navigation Semantic List */}
+          {/* Desktop Navigation */}
           <ul
-            className={`hidden md:flex items-center rounded-full p-1 ${isDark ? "bg-white/5" : "bg-slate-100/50"}`}
+            className={`hidden md:flex items-center rounded-md p-1 gap-1 ${
+              isDark ? "bg-white/5" : "bg-slate-100"
+            }`}
           >
             <li>
               <Link
                 to="/"
-                className={`block rounded-full px-4 py-1.5 text-sm font-bold transition-all ${
+                className={`block rounded-md px-4 py-1.5 text-sm font-bold transition-all ${
                   isActive("/")
                     ? isDark
                       ? "bg-dark-primary text-blue-100 shadow-sm"
-                      : "bg-white text-accent shadow-sm"
+                      : "bg-white text-slate-900 shadow-sm"
                     : isDark
                       ? "text-slate-400 hover:text-slate-200"
                       : "text-slate-500 hover:text-slate-700"
@@ -62,11 +64,11 @@ function MainNavigation() {
             <li>
               <Link
                 to="/social"
-                className={`block rounded-full px-4 py-1.5 text-sm font-bold transition-all ${
+                className={`block rounded-md px-4 py-1.5 text-sm font-bold transition-all ${
                   isActive("/social")
                     ? isDark
                       ? "bg-dark-primary text-blue-100 shadow-sm"
-                      : "bg-white text-accent shadow-sm"
+                      : "bg-white text-slate-900 shadow-sm"
                     : isDark
                       ? "text-slate-400 hover:text-slate-200"
                       : "text-slate-500 hover:text-slate-700"
@@ -77,15 +79,18 @@ function MainNavigation() {
             </li>
           </ul>
 
+          {/* Controls */}
           <div
-            className={`flex items-center gap-1 border-l pl-1 md:pl-4 md:gap-3 ${isDark ? "border-white/10" : "border-slate-200"}`}
+            className={`flex items-center gap-1 border-l pl-2 md:pl-4 md:gap-2 ${
+              isDark ? "border-white/10" : "border-slate-200"
+            }`}
           >
             <Button
               onClick={toggleTheme}
               variant="icon"
               size="iconSm"
               title="Toggle Theme"
-              className="rounded-full group"
+              className="group rounded-md"
             >
               {isDark ? (
                 <FaSun className="h-4 w-4 text-yellow-300 transition-transform group-hover:rotate-90" />
@@ -96,44 +101,46 @@ function MainNavigation() {
 
             <Button
               onClick={toggleLanguage}
-              variant="icon"
+              variant="secondary"
               size="sm"
               title="Toggle Language"
-              className="h-9 rounded-full px-3 text-xs font-bold uppercase tracking-wide gap-2"
+              className="rounded-md gap-1.5 text-xs font-bold uppercase tracking-wide"
               icon={FaGlobe}
             >
-              <span>{language}</span>
+              {language}
             </Button>
 
             {/* Mobile Menu Button */}
             <Button
-              onClick={toggleMenu}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
               variant="icon"
               size="iconSm"
               title="Toggle Menu"
-              className="flex md:hidden rounded-full"
+              className="flex md:hidden rounded-md"
             >
-              {isMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+              {isMenuOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
             </Button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown Semantic List */}
+      {/* Mobile Dropdown */}
       {isMenuOpen && (
         <div
-          className={`md:hidden animate-slideDown overflow-hidden border-t ${isDark ? "border-white/5 bg-dark-secondary" : "border-slate-100 bg-white"}`}
+          className={`md:hidden overflow-hidden border-t ${
+            isDark ? "border-white/5 bg-dark-secondary" : "border-slate-100 bg-white"
+          }`}
         >
-          <ul className="flex flex-col gap-2 p-4">
+          <ul className="flex flex-col p-3 gap-1">
             <li>
               <Link
                 to="/"
                 onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold transition-all ${
+                className={`flex items-center justify-between rounded-md px-4 py-3 text-sm font-bold transition-all ${
                   isActive("/")
                     ? isDark
                       ? "bg-blue-500/10 text-blue-400"
-                      : "bg-accent/5 text-accent"
+                      : "bg-slate-100 text-slate-900"
                     : isDark
                       ? "text-slate-400 hover:bg-white/5"
                       : "text-slate-600 hover:bg-slate-50"
@@ -147,20 +154,20 @@ function MainNavigation() {
             </li>
             <li>
               <Link
-                to="/home2"
+                to="/social"
                 onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold transition-all ${
-                  isActive("/home2")
+                className={`flex items-center justify-between rounded-md px-4 py-3 text-sm font-bold transition-all ${
+                  isActive("/social")
                     ? isDark
                       ? "bg-blue-500/10 text-blue-400"
-                      : "bg-accent/5 text-accent"
+                      : "bg-slate-100 text-slate-900"
                     : isDark
                       ? "text-slate-400 hover:bg-white/5"
                       : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
                 {t("social")}
-                {isActive("/home2") && (
+                {isActive("/social") && (
                   <div className="h-1.5 w-1.5 rounded-full bg-current" />
                 )}
               </Link>
@@ -172,4 +179,4 @@ function MainNavigation() {
   );
 }
 
-export default MainNavigation;
+export default Navbar;
